@@ -1,0 +1,3 @@
+# multi_personas_agent/requirements.txt
+google-adk
+python-dotenv
