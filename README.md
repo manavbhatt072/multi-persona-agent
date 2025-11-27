@@ -1,5 +1,7 @@
 # Multi-Persona Council Agent
 
+**⚠️ Private Repository**
+
 A powerful agentic AI system built with the **Google Agent Development Kit (ADK)**. This project implements a "Council of Personas" architecture where multiple specialized AI agents brainstorm on a topic in parallel, followed by a Mediator agent that synthesizes their diverse perspectives into a comprehensive action plan.
 
 ## 🚀 Features
@@ -17,6 +19,7 @@ A powerful agentic AI system built with the **Google Agent Development Kit (ADK)
 ## 🛠️ Installation
 
 1.  **Clone the repository:**
+    *Note: You must be an added collaborator to clone this private repository.*
     ```bash
     git clone https://github.com/manavbhatt072/multi-persona-agent.git
     cd multi-persona-agent
@@ -70,4 +73,8 @@ multi_personas_agent/
 
 ## 🤝 Collaboration
 
-This project is open for collaboration! Feel free to fork the repository, submit Pull Requests, or open Issues for improvements.
+This is a **private repository**. Access is restricted to authorized team members.
+To contribute:
+1.  Ensure you have been added as a collaborator.
+2.  Clone the repo and create a new branch for your feature.
+3.  Push your changes and open a Pull Request for review.
