@@ -6,12 +6,14 @@ A powerful agentic AI system built with the **Google Agent Development Kit (ADK)
 
 ## 🚀 Features
 
--   **Multi-Persona Architecture**: Spawns 5 distinct personas to analyze a prompt from different angles:
+-   **Dynamic Router**: Intelligently selects the most relevant subset of personas based on the user's specific prompt, ensuring focused and efficient brainstorming.
+-   **Multi-Persona Architecture**: Spawns distinct personas (selected by the Router) to analyze a prompt from different angles:
     -   **Analyst**: Focuses on data, feasibility, and metrics.
     -   **Critic**: Identifies weaknesses, risks, and edge cases.
     -   **Optimist**: Highlights benefits, opportunities, and best-case scenarios.
     -   **Creative Thinker**: Generates out-of-the-box ideas and metaphors.
     -   **Domain Expert**: Provides practical, domain-specific tactics using tools.
+-   **Consensus Loop**: A feedback-driven iterative process where the Mediator reviews the council's output. If the plan is insufficient, the Mediator requests refinements (up to 3 iterations) until a consensus is reached.
 -   **Mediator Synthesis**: A dedicated agent that resolves conflicts and combines all reports into a final **Synthesized Action Plan**.
 -   **Parallel Execution**: Uses `ParallelAgent` to run all council members simultaneously for efficiency.
 -   **ADK Web Integration**: Fully compatible with `adk web` for visual debugging and trace analysis.
@@ -25,12 +27,26 @@ A powerful agentic AI system built with the **Google Agent Development Kit (ADK)
     cd multi-persona-agent
     ```
 
-2.  **Install dependencies:**
+2.  **Create and Activate Virtual Environment:**
+    
+    *   **macOS / Linux:**
+        ```bash
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+
+    *   **Windows:**
+        ```bash
+        python -m venv venv
+        .\venv\Scripts\activate
+        ```
+
+3.  **Install dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-3.  **Set up Environment Variables:**
+4.  **Set up Environment Variables:**
     Create a `.env` file in the root directory and add your Google API Key:
     ```bash
     GOOGLE_API_KEY=your_api_key_here
@@ -59,6 +75,7 @@ multi_personas_agent/
 ├── src/
 │   ├── agents/
 │   │   ├── personas.py       # Definitions of the 5 council personas
+│   │   ├── router.py         # Logic for selecting relevant personas
 │   │   └── mediator.py       # Definition of the Mediator agent
 │   ├── flows/
 │   │   └── system.py         # Orchestration logic (Parallel -> Sequential)
