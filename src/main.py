@@ -66,6 +66,32 @@ if __name__ == "__main__":
     # --- Step 2: Build Dynamic Council ---
     print("\n--- 2. 🏗️ Building Council... ---")
     council_layer = build_dynamic_council(selected_personas)
+    
+    # --- CHECK FOR CHITCHAT ---
+    if "Greeter" in selected_personas:
+        print("\n--- 💬 Chitchat Detected ---")
+        # Run only the Greeter (which is wrapped in the council_layer)
+        greeter_runner = InMemoryRunner(agent=council_layer, app_name="greeter_app")
+        
+        greeter_runner.session_service.create_session_sync(
+            app_name="greeter_app",
+            user_id="user_1",
+            session_id="session_greeter"
+        )
+        
+        events = greeter_runner.run(
+            user_id="user_1",
+            session_id="session_greeter",
+            new_message=types.Content(parts=[types.Part(text=user_prompt)], role="user")
+        )
+        
+        for event in events:
+            if hasattr(event, 'content') and event.content and event.content.parts:
+                print(f"\n[Greeter]: {event.content.parts[0].text}")
+                
+        print("\n(Skipping Brainstorming Loop for simple query)")
+        exit()
+        
     mediator = get_mediator()
     
     # Create the Iteration Unit (Council -> Mediator)
