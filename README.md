@@ -7,14 +7,16 @@ A powerful agentic AI system built with the **Google Agent Development Kit (ADK)
 ## 🚀 Features
 
 -   **Dynamic Router**: Intelligently selects the most relevant subset of personas based on the user's specific prompt, ensuring focused and efficient brainstorming.
+-   **Real-Time Web Intelligence**: The **Domain Expert** is equipped with a live web search tool (DuckDuckGo), allowing it to fetch *actual* market data, trends, and risks instead of relying on hallucinations or mock data.
 -   **Multi-Persona Architecture**: Spawns distinct personas (selected by the Router) to analyze a prompt from different angles:
     -   **Analyst**: Focuses on data, feasibility, and metrics.
     -   **Critic**: Identifies weaknesses, risks, and edge cases.
     -   **Optimist**: Highlights benefits, opportunities, and best-case scenarios.
     -   **Creative Thinker**: Generates out-of-the-box ideas and metaphors.
-    -   **Domain Expert**: Provides practical, domain-specific tactics using tools.
+    -   **Domain Expert**: Uses **Live Search** to provide real-world tactics.
 -   **Consensus Loop**: A feedback-driven iterative process where the Mediator reviews the council's output. If the plan is insufficient, the Mediator requests refinements (up to 3 iterations) until a consensus is reached.
 -   **Mediator Synthesis**: A dedicated agent that resolves conflicts and combines all reports into a final **Synthesized Action Plan**.
+-   **🎙️ Podcast Mode**: Automatically converts the final action plan into an engaging, 2-minute dialogue script between the Host, Expert, and Creative, ready for TTS generation.
 -   **Parallel Execution**: Uses `ParallelAgent` to run all council members simultaneously for efficiency.
 -   **ADK Web Integration**: Fully compatible with `adk web` for visual debugging and trace analysis.
 

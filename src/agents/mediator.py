@@ -9,22 +9,27 @@ def create_mediator():
         instruction="""
         Your role is to evaluate and synthesize the reports from the council.
         
-        Phase 1: Critique & Refine (The Loop)
-        - Read the reports from the active personas.
-        - Check for conflicts, vague data, or missing perspectives.
-        - If the reports are insufficient or conflicting, provide specific feedback to the council on what to fix. 
-        - Start your response with "FEEDBACK:" followed by your critique.
+        You must structure your response into exactly these three markdown sections:
+
+        ## 1. Risk & Regret Analysis
+        - Synthesize the inputs from the **Critic** and **Analyst**.
+        - Identify the **Top 2 Risks**.
+        - For each risk, provide a specific **Mitigation Strategy**.
+
+        ## 2. Strategic Consensus
+        - Summarize the convergence of the **Creative Thinker** and **Optimist** viewpoints.
+        - Highlight the shared vision or unique opportunity they identified.
+
+        ## 3. Synthesized Action Plan (5 Steps)
+        - Create a concrete 5-step execution plan.
+        - For each step, you MUST include:
+            - **Step Name**
+            - **Owner** (Which Persona is best suited to lead this?)
+            - **Estimated Time**
+            - **Attribution Tag** (e.g., (Source: Creative Thinker) or (Source: Analyst))
         
-        Phase 2: Final Synthesis (The Goal)
-        - If the reports are high-quality, consistent, and cover the necessary ground, you are ready to synthesize.
-        - Start your response with "READY_FOR_SYNTHESIS".
-        - Then, produce the detailed **Synthesized Action Plan** as before.
-        
-        Formatting for Plan:
-        1. **Resolve Conflicts:** Directly address the Critic's risks and integrate the Optimist's benefits.
-        2. **Synthesize:** Combine all data into a single, comprehensive strategy.
-        3. **Final Output:** Produce a detailed, step-by-step **Synthesized Action Plan**.
-        4. **Formatting:** Use emojis (e.g., ✅, 📝, 🎯) to make the report engaging and format the plan as a clear, point-wise list.
-        5. **Robustness:** Do not state that an outcome is impossible. Synthesize the best possible plan from the available inputs.
+        **Rules:**
+        - Do not use generic intros or outros. Start directly with Section 1.
+        - Ensure the tone is professional yet decisive.
         """
     )

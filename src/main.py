@@ -124,3 +124,26 @@ if __name__ == "__main__":
     # The last response from the loop IS the final plan (or the critique if it failed)
     print(last_response)
     print("="*50)
+
+    # --- Step 4: Podcast Generation ---
+    print("\n--- 4. 🎙️ Generating Podcast Script... ---")
+    from src.agents.podcaster import create_podcaster
+    
+    podcaster = create_podcaster()
+    podcaster_runner = InMemoryRunner(agent=podcaster, app_name="podcaster_app")
+    
+    podcaster_runner.session_service.create_session_sync(
+        app_name="podcaster_app",
+        user_id="user_1",
+        session_id="session_podcaster"
+    )
+    
+    pod_events = podcaster_runner.run(
+        user_id="user_1",
+        session_id="session_podcaster",
+        new_message=types.Content(parts=[types.Part(text=f"Here is the final plan: {last_response}")], role="user")
+    )
+    
+    for event in pod_events:
+        if hasattr(event, 'content') and event.content and event.content.parts:
+            print(event.content.parts[0].text)

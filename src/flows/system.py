@@ -48,11 +48,15 @@ def build_council_system():
     
     # 3. Mediator
     mediator = create_mediator()
+
+    # 4. Podcaster
+    from src.agents.podcaster import create_podcaster
+    podcaster = create_podcaster()
     
-    # 4. Sequential Flow
+    # 5. Sequential Flow
     return SequentialAgent(
         name="Multi_Persona_Council",
-        sub_agents=[council_layer, mediator]
+        sub_agents=[council_layer, mediator, podcaster]
     )
 
 def get_mediator():
