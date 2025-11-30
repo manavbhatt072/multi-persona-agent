@@ -131,12 +131,21 @@ flowchart TD
 
 ### Option 1: CLI (The "Hacker" Way)
 Run the full loop in your terminal. Watch the agents debate in real-time!
+
+**Mac / Linux:**
 ```bash
 python3 -m src.main
 ```
 
+**Windows:**
+```bash
+python -m src.main
+```
+
 ### Option 2: ADK Web Visualizer (The "Demo" Way)
 See the beautiful agent graph and trace every thought process.
+
+**All Platforms:**
 ```bash
 adk web . --port 8000
 ```
@@ -148,18 +157,21 @@ Then open `http://127.0.0.1:8000`.
 
 ```
 multi_personas_agent/
+├── agent.py                  # ADK Web Entry Point (Root)
 ├── src/
 │   ├── agents/
 │   │   ├── personas.py       # The Council (Analyst, Critic, Optimist, etc.)
 │   │   ├── router.py         # Dynamic selection logic
 │   │   ├── mediator.py       # The CEO/Synthesis agent
 │   │   └── podcaster.py      # 🎙️ The Scriptwriter
+│   ├── data/
+│   │   └── memory_bank.json  # 🧠 Shared Memory
 │   ├── flows/
 │   │   └── system.py         # Orchestration (Parallel -> Sequential)
 │   ├── tools/
 │   │   └── expert_tool.py    # 🦆 DuckDuckGo Search Tool
 │   ├── main.py               # CLI Entry Point
-│   └── agent.py              # ADK Web Entry Point
+│   └── agent.py              # Internal ADK Entry Point
 ├── requirements.txt          # Dependencies
 └── .env                      # API Keys
 ```
