@@ -40,6 +40,56 @@ After the plan is finalized, the **Podcaster Agent** takes over.
 -   It writes a witty, engaging script between a Host, an Expert, and a Creative Guest.
 -   Perfect for turning dry reports into consumable audio content.
 
+
+---
+
+## 🏗️ System Architecture
+
+The system follows a **Router-Council-Mediator** pattern with a feedback loop, designed to simulate a brainstorming session between experts.
+
+```mermaid
+flowchart TD
+    User([User Input]) --> Router[🚦 Router Agent]
+    
+    Router -- "Selects Experts" --> Decision{Is Chitchat?}
+    
+    %% Path 1: Simple Chitchat
+    Decision -- Yes --> Greeter[💬 Greeter Agent]
+    Greeter --> Output([Final Response])
+    
+    %% Path 2: Brainstorming Session
+    Decision -- No --> CouncilBox
+    
+    subgraph CouncilBox [Dynamic Council (Parallel Execution)]
+        direction TB
+        P1[📈 Analyst]
+        P2[🛑 Critic]
+        P3[✨ Optimist]
+        P4[🎨 Creative Thinker]
+        P5[🛠️ Domain Expert]
+    end
+    
+    CouncilBox --> Mediator[⚖️ Mediator Agent]
+    
+    Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
+    
+    %% Feedback Loop
+    Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
+    Feedback --> CouncilBox
+    
+    %% Success Path
+    Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
+    Podcaster --> Output([Final Podcast Script])
+
+    %% Styling
+    classDef agent fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef control fill:#ffd,stroke:#333,stroke-width:2px;
+    classDef storage fill:#dfd,stroke:#333,stroke-width:2px;
+    
+    class Router,Greeter,Mediator,Podcaster,P1,P2,P3,P4,P5 agent;
+    class Decision,Check control;
+```
+
 ---
 
 ## 🛠️ Installation
