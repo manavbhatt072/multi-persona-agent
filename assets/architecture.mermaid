@@ -1,0 +1,40 @@
+flowchart TD
+    User([User Input]) --> Router[🚦 Router Agent]
+    
+    Router -- "Selects Experts" --> Decision{Is Chitchat?}
+    
+    %% Path 1: Simple Chitchat
+    Decision -- Yes --> Greeter[💬 Greeter Agent]
+    Greeter --> Output([Final Response])
+    
+    %% Path 2: Brainstorming Session
+    Decision -- No --> P3
+    
+    subgraph CouncilBox [Dynamic Council - Parallel Execution]
+        direction TB
+        P1[📈 Analyst]
+        P2[🛑 Critic]
+        P3[✨ Optimist]
+        P4[🎨 Creative Thinker]
+        P5[🛠️ Domain Expert]
+    end
+    
+    P1 & P2 & P3 & P4 & P5 --> Mediator[⚖️ Mediator Agent]
+    
+    Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
+    
+    %% Feedback Loop
+    Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
+    Feedback --> P3
+    
+    %% Success Path
+    Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
+    Podcaster --> Output([Final Podcast Script])
+
+    %% Styling
+    classDef agent fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef control fill:#ffd,stroke:#333,stroke-width:2px;
+    classDef storage fill:#dfd,stroke:#333,stroke-width:2px;
+    
+    class Router,Greeter,Mediator,Podcaster,P1,P2,P3,P4,P5 agent;
+    class Decision,Check control;
