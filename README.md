@@ -1,4 +1,4 @@
-# 🧠 Multi-Persona Council Agent
+# Multi-Persona Brainstorm Partner: Enterprise-Grade Decision Engine (ADK Project)
 
 > **"A Boardroom in a Box"** — An intelligent, agentic system that brainstorms, debates, and synthesizes actionable strategies using a Council of AI Personas.
 
@@ -6,93 +6,47 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-yellow?style=for-the-badge&logo=python)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 
-## 🌟 Why This Project Wins
-This isn't just another chatbot. It's a **sophisticated decision-making engine** that mimics a real-world executive council. It features:
-1.  **Dynamic Routing**: It doesn't just run everyone. It *thinks* about who is needed (e.g., calling the "Creative Thinker" only for abstract ideas).
-2.  **Real-Time Intelligence**: It searches the *live web* for market data—no hallucinations.
-3.  **Conflict Synthesis**: It forces diverse personas (Optimist vs. Critic) to debate until a consensus is reached.
-4.  **🎙️ Podcast Mode**: It automatically converts the boring text plan into a **fun, 2-minute audio script** ready for production.
+---
+
+## Problem & Value Proposition
+
+Today’s generative AI tools typically operate from a single point of view, leading to one-dimensional answers. Real expertise emerges when diverse perspectives—creativity, risk assessment, and data-driven logic—are brought together.
+
+This project solves this by simulating a **Council of Experts** that thinks the way humans actually work in groups. It leverages four key **Google Agent Development Kit (ADK)** concepts to achieve this:
+
+1.  **SequentialAgent**: Orchestrates the high-level flow from the Council -> Mediator -> Podcaster, ensuring a structured pipeline of thought.
+2.  **ParallelAgent**: Runs the "Council" of personas (Analyst, Critic, Optimist) simultaneously, allowing for diverse, independent viewpoints to be generated in parallel.
+3.  **LlmAgent**: Powers each individual persona with a distinct personality and instruction set (e.g., the "Critic" is instructed to find flaws, the "Optimist" to find benefits).
+4.  **Custom Tools**: Equips the "Domain Expert" agent with a real-time **Web Search Tool**, enabling it to fetch live market data and avoid hallucinations.
+
+By combining these, the system provides balanced perspectives, reduced hallucination, and structured decision-making that no single-prompt LLM can match.
 
 ---
 
-## 🚀 Key Features
-
-### 1. 🚦 Dynamic Persona Router
-The system analyzes your prompt keywords to assemble the perfect team:
--   **Core Team (Always Active)**: `Analyst` 📈, `Critic` 🛑, `Optimist` ✨.
--   **Creative Trigger**: Adds `Creative Thinker` 🎨 if you ask for "ideas", "abstract", or "new names".
--   **Expert Trigger**: Adds `Domain Expert` 🛠️ if you ask for "market", "cost", or "industry" data.
-
-### 2. 🌐 Real-Time Web Search
-The **Domain Expert** is equipped with `DuckDuckGo Search`.
--   *Competitors*: Use static/fake data.
--   *This Agent*: Fetches **live 2024/2025 market trends**, risk factors, and competitor analysis.
-
-### 3. ⚖️ The Mediator (Consensus Engine)
-A specialized `Gemini-1.5-Pro` agent that acts as the CEO.
--   **Strict Output Format**: It refuses to output generic text. It *must* produce:
-    1.  **Risk & Regret Analysis** (Top 2 Risks + Mitigations)
-    2.  **Strategic Consensus** (Where the Optimist & Critic agree)
-    3.  **5-Step Action Plan** (With Owners & Deadlines)
-
-### 4. 🎙️ Podcast Mode
-After the plan is finalized, the **Podcaster Agent** takes over.
--   It writes a witty, engaging script between a Host, an Expert, and a Creative Guest.
--   Perfect for turning dry reports into consumable audio content.
-
-
----
-
-## 🏗️ System Architecture
+## Architectural Design (ADK Flow)
 
 The system follows a **Router-Council-Mediator** pattern with a feedback loop, designed to simulate a brainstorming session between experts.
 
-```mermaid
-flowchart TD
-    User([User Input]) --> Router[🚦 Router Agent]
-    
-    Router -- "Selects Experts" --> Decision{Is Chitchat?}
-    
-    %% Path 1: Simple Chitchat
-    Decision -- Yes --> Greeter[💬 Greeter Agent]
-    Greeter --> Output([Final Response])
-    
-    %% Path 2: Brainstorming Session
-    Decision -- No --> P3
-    
-    subgraph CouncilBox [Dynamic Council - Parallel Execution]
-        direction TB
-        P1[📈 Analyst]
-        P2[🛑 Critic]
-        P3[✨ Optimist]
-        P4[🎨 Creative Thinker]
-        P5[🛠️ Domain Expert]
-    end
-    
-    P1 & P2 & P3 & P4 & P5 --> Mediator[⚖️ Mediator Agent]
-    
-    Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
-    
-    %% Feedback Loop
-    Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
-    Feedback --> P3
-    
-    %% Success Path
-    Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
-    Podcaster --> Output([Final Podcast Script])
+![System Architecture](https://mermaid.ink/img/Zmxvd2NoYXJ0IFRECiAgICBVc2VyKFtVc2VyIElucHV0XSkgLS0+IFJvdXRlclvwn5qmIFJvdXRlciBBZ2VudF0KICAgIFJvdXRlciAtLSBTZWxlY3RzIEV4cGVydHMgLS0+IERlY2lzaW9ue0lzIENoaXRjaGF0P30KICAgIERlY2lzaW9uIC0tIFllcyAtLT4gR3JlZXRlclvwn5KsIEdyZWV0ZXIgQWdlbnRdCiAgICBHcmVldGVyIC0tPiBPdXRwdXQoW0ZpbmFsIFJlc3BvbnNlXSkKICAgIERlY2lzaW9uIC0tIE5vIC0tPiBQMwogICAgc3ViZ3JhcGggQ291bmNpbEJveCBbRHluYW1pYyBDb3VuY2lsIC0gUGFyYWxsZWwgRXhlY3V0aW9uXQogICAgICAgIGRpcmVjdGlvbiBUQgogICAgICAgIFAxW/Cfk4ggQW5hbHlzdF0KICAgICAgICBQMlvwn5uRIENyaXRpY10KICAgICAgICBQM1vinKggT3B0aW1pc3RdCiAgICAgICAgUDRb8J+OqCBDcmVhdGl2ZSBUaGlua2VyXQogICAgICAgIFA1W/Cfm6DvuI8gRG9tYWluIEV4cGVydF0KICAgIGVuZAogICAgUDEgJiBQMiAmIFAzICYgUDQgJiBQNSAtLT4gTWVkaWF0b3Jb4pqW77iPIE1lZGlhdG9yIEFnZW50XQogICAgTWVkaWF0b3IgLS0gU3ludGhlc2l6ZXMgUmVwb3J0cyAtLT4gQ2hlY2t7Q29uc2Vuc3VzIFJlYWNoZWQ/fQogICAgQ2hlY2sgLS0gTm8gKFJlcXVlc3QgUmVmaW5lbWVudCkgLS0+IEZlZWRiYWNrW+KaoO+4jyBGZWVkYmFjayBMb29wXQogICAgRmVlZGJhY2sgLS0+IFAzCiAgICBDaGVjayAtLSBZZXMgKFJlYWR5KSAtLT4gUG9kY2FzdGVyW/CfjpnvuI8gUG9kY2FzdGVyIEFnZW50XQogICAgUG9kY2FzdGVyIC0tPiBPdXRwdXQoW0ZpbmFsIFBvZGNhc3QgU2NyaXB0XSkKICAgIGNsYXNzRGVmIGFnZW50IGZpbGw6I2Y5ZixzdHJva2U6IzMzMyxzdHJva2Utd2lkdGg6MnB4OwogICAgY2xhc3NEZWYgY29udHJvbCBmaWxsOiNmZmQsc3Ryb2tlOiMzMzMsc3Ryb2tlLXdpZHRoOjJweDsKICAgIGNsYXNzRGVmIHN0b3JhZ2UgZmlsbDojZGZkLHN0cm9rZTojMzMzLHN0cm9rZS13aWR0aDoycHg7CiAgICBjbGFzcyBSb3V0ZXIsR3JlZXRlcixNZWRpYXRvcixQb2RjYXN0ZXIsUDEsUDIsUDMsUDQsUDUgYWdlbnQ7CiAgICBjbGFzcyBEZWNpc2lvbixDaGVjayBjb250cm9sOw==)
 
-    %% Styling
-    classDef agent fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef control fill:#ffd,stroke:#333,stroke-width:2px;
-    classDef storage fill:#dfd,stroke:#333,stroke-width:2px;
-    
-    class Router,Greeter,Mediator,Podcaster,P1,P2,P3,P4,P5 agent;
-    class Decision,Check control;
-```
+### Workflow Steps:
+1.  **Router Agent**: Analyzes the user's prompt and dynamically selects the best experts (e.g., "Creative Thinker" for abstract ideas).
+2.  **Dynamic Council (Parallel Execution)**: Selected agents run simultaneously to generate independent reports.
+3.  **Mediator Agent**: Synthesizes the reports, resolving conflicts between the Optimist and Critic.
+4.  **Feedback Loop**: If the Mediator isn't satisfied, it requests refinement from the Council.
+5.  **Podcaster Agent**: Converts the final technical plan into an engaging audio script.
 
 ---
 
-## 🛠️ Installation
+## How to Run Locally
+
+Follow these steps to get the project running on your local machine.
+
+### Prerequisites
+-   Python 3.10 or higher
+-   A Google Cloud Project with Gemini API access
+
+### Installation
 
 1.  **Clone the repository:**
     ```bash
@@ -120,36 +74,40 @@ flowchart TD
     ```
 
 4.  **Configure Environment:**
-    Create a `.env` file and add your Google API Key:
+    Create a `.env` file in the root directory and add your Google API Key:
     ```bash
     GOOGLE_API_KEY=your_api_key_here
     ```
 
----
+### Usage
 
-## 💻 Usage
-
-### Option 1: CLI (The "Hacker" Way)
-Run the full loop in your terminal. Watch the agents debate in real-time!
-
-**Mac / Linux:**
+**Option 1: CLI (The "Hacker" Way)**
+Run the full loop in your terminal.
 ```bash
 python3 -m src.main
+# Windows: python -m src.main
 ```
 
-**Windows:**
-```bash
-python -m src.main
-```
-
-### Option 2: ADK Web Visualizer (The "Demo" Way)
+**Option 2: ADK Web Visualizer (The "Demo" Way)**
 See the beautiful agent graph and trace every thought process.
-
-**All Platforms:**
 ```bash
 adk web . --port 8000
 ```
 Then open `http://127.0.0.1:8000`.
+
+---
+
+## ☁️ Deployment (Render.com)
+
+Since this application uses `adk web` (a persistent server), it is best deployed on platforms like **Render** or **Railway** that support Docker.
+
+1.  **Push your code** to a GitHub repository.
+2.  **Sign up** for [Render.com](https://render.com).
+3.  **Create a New Web Service**:
+    -   Connect your GitHub repo.
+    -   Select **Docker** as the Runtime.
+    -   **Environment Variables**: Add `GOOGLE_API_KEY`.
+4.  **Deploy**: Render will build the Docker image and start the `adk web` server.
 
 ---
 
@@ -173,33 +131,6 @@ multi_personas_agent/
 │   ├── main.py               # CLI Entry Point
 │   └── agent.py              # Internal ADK Entry Point
 ├── requirements.txt          # Dependencies
+├── Dockerfile                # Deployment Configuration
 └── .env                      # API Keys
 ```
-
----
-
-## ☁️ Deployment (Render.com)
-
-Since this application uses `adk web` (a persistent server), it is best deployed on platforms like **Render** or **Railway** that support Docker. **Vercel is not recommended** as it does not support long-running processes like the ADK Visualizer.
-
-1.  **Push your code** to a GitHub repository.
-2.  **Sign up** for [Render.com](https://render.com).
-3.  **Create a New Web Service**:
-    -   Connect your GitHub repo.
-    -   Select **Docker** as the Runtime.
-    -   **Region**: Choose one close to you.
-    -   **Environment Variables**:
-        -   Add `GOOGLE_API_KEY`: Your Gemini API Key.
-4.  **Deploy**: Render will build the Docker image and start the `adk web` server.
-
----
-
-## 🤝 Contributing
-This is a private repository for the hackathon team.
-1.  Fork & Clone.
-2.  Create a feature branch (`git checkout -b feature/amazing-idea`).
-3.  Commit & Push.
-4.  Open a Pull Request.
-
----
-*Built with ❤️ using Google ADK & Gemini Models.*
