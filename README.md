@@ -58,9 +58,9 @@ flowchart TD
     Greeter --> Output([Final Response])
     
     %% Path 2: Brainstorming Session
-    Decision -- No --> CouncilBox
+    Decision -- No --> P3
     
-    subgraph CouncilBox [Dynamic Council (Parallel Execution)]
+    subgraph CouncilBox [Dynamic Council - Parallel Execution]
         direction TB
         P1[📈 Analyst]
         P2[🛑 Critic]
@@ -69,13 +69,13 @@ flowchart TD
         P5[🛠️ Domain Expert]
     end
     
-    CouncilBox --> Mediator[⚖️ Mediator Agent]
+    P1 & P2 & P3 & P4 & P5 --> Mediator[⚖️ Mediator Agent]
     
     Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
     
     %% Feedback Loop
     Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
-    Feedback --> CouncilBox
+    Feedback --> P3
     
     %% Success Path
     Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
