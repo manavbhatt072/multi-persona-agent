@@ -28,6 +28,49 @@ By combining these strengths, the system produces more accurate, creative, and r
 
 The architecture is modular, flexible, and inspired by human decision dynamics.
 
+```mermaid
+flowchart TD
+    User([User Input]) --> Router[🚦 Router Agent]
+    
+    Router -- "Selects Experts" --> Decision{Is Chitchat?}
+    
+    %% Path 1: Simple Chitchat
+    Decision -- Yes --> Greeter[💬 Greeter Agent]
+    Greeter --> Output([Final Response])
+    
+    %% Path 2: Brainstorming Session
+    Decision -- No --> P3
+    
+    subgraph CouncilBox [Dynamic Council - Parallel Execution]
+        direction TB
+        P1[📈 Analyst]
+        P2[🛑 Critic]
+        P3[✨ Optimist]
+        P4[🎨 Creative Thinker]
+        P5[🛠️ Domain Expert]
+    end
+    
+    P1 & P2 & P3 & P4 & P5 --> Mediator[⚖️ Mediator Agent]
+    
+    Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
+    
+    %% Feedback Loop
+    Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
+    Feedback --> P3
+    
+    %% Success Path
+    Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
+    Podcaster --> Output([Final Podcast Script])
+
+    %% Styling
+    classDef agent fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef control fill:#ffd,stroke:#333,stroke-width:2px;
+    classDef storage fill:#dfd,stroke:#333,stroke-width:2px;
+    
+    class Router,Greeter,Mediator,Podcaster,P1,P2,P3,P4,P5 agent;
+    class Decision,Check control;
+```
+
 **1. The Orchestrator / Router**
 When the user submits a query, the Router analyzes the request and selects the most relevant personas.
 For example:
@@ -70,11 +113,11 @@ This mode is extremely valuable for product pitches, content creation, and engag
 
 The system is built using:
 
-Google AI Agent Framework / Google AI Studio
+Google Agent Development Kit (ADK) / Google AI Studio
 Python 3.10+
 Modular Persona Templates
 Multi-agent orchestration logic
-Optional Web Search Tool for real-time data
+Integrated Web Search Tool (DuckDuckGo) for real-time data
 Dynamic Router for persona selection
 Mediator Agent for synthesis
 Async execution for speed
@@ -96,7 +139,6 @@ Personas can contradict each other—this creates more robust and realistic anal
 **4. Consensus Engine**
 A specialized agent forces alignment through structured synthesis.
 
-**5. Optional Multimedia Mode**
 Podcast Mode generates entertaining scripts, something most AI tools cannot do natively.
 
 **6. Modular and Extensible**
