@@ -1,21 +1,27 @@
-# from google.adk.agents.llm_agent import Agent
-
-# root_agent = Agent(
-#     model='<FILL_IN_MODEL>',
-#     name='root_agent',
-#     description='A helpful assistant for user questions.',
-#     instruction='Answer user questions to the best of your knowledge',
-# )
-
 import os
+import json
+import re
 from dotenv import load_dotenv
-from src.flows.system import build_council_system # <-- Import the full flow
+from google.adk.runners import InMemoryRunner, types, print_event
+from src.flows.system import get_router, build_dynamic_council, get_mediator
+from google.adk.agents import SequentialAgent
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
-# Define agent_app at module level for adk web
-agent_app = build_council_system()
+def parse_router_output(output_text):
+    """Extracts the JSON list of personas from the Router's output."""
+    try:
+        # Attempt to find a JSON list in the text
+        match = re.search(r'\[.*\]', output_text, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            return json.loads(json_str)
+        return json.loads(output_text)
+    except Exception as e:
+        print(f"Error parsing Router output: {e}")
+        # Fallback
+        return ["Analyst", "Optimist", "Domain_Expert"]
 
 if __name__ == "__main__":
     
@@ -24,49 +30,146 @@ if __name__ == "__main__":
         print("ERROR: GOOGLE_API_KEY not found in .env file.")
         exit()
 
-    print("--- Initializing Multi-Persona Council Agent ---")
-    
-    # 1. Build the full agent system (SequentialAgent wrapping ParallelAgent)
-    # agent_app is already defined above
+    print("--- Initializing Multi-Persona Agent with Routing & Loop ---")
     
     user_prompt = input("Enter the topic/prompt for the Council: ")
     
-    print("\n--- Running Council Layers (Parallel Execution)... ---")
+    # --- Step 1: Router Agent ---
+    print("\n--- 1. 🚦 Router Agent: Selecting Experts... ---")
+    router = get_router()
+    router_runner = InMemoryRunner(agent=router, app_name="router_app")
     
-    # 2. Run the system using InMemoryRunner
-    from google.adk.runners import InMemoryRunner, types, print_event
+    # Run Router
+    router_runner.session_service.create_session_sync(
+        app_name="router_app",
+        user_id="user_1",
+        session_id="session_router"
+    )
     
-    APP_NAME = "multi_persona_agent"
-    runner = InMemoryRunner(agent=agent_app, app_name=APP_NAME)
+    events = router_runner.run(
+        user_id="user_1",
+        session_id="session_router",
+        new_message=types.Content(parts=[types.Part(text=user_prompt)], role="user")
+    )
     
-    # Create a session first
-    session_id = "session_1"
+    # Capture Router Output
+    router_output = ""
+    for event in events:
+        # print_event(event) # Optional: print router steps
+        if hasattr(event, 'content') and event.content and event.content.parts:
+             router_output = event.content.parts[0].text
+
+    print(f"Router Decision: {router_output}")
+    selected_personas = parse_router_output(router_output)
+    print(f"Selected Personas: {selected_personas}")
+
+    # --- Step 2: Build Dynamic Council ---
+    print("\n--- 2. 🏗️ Building Council... ---")
+    council_layer = build_dynamic_council(selected_personas)
+    
+    # --- CHECK FOR CHITCHAT ---
+    if "Greeter" in selected_personas:
+        print("\n--- 💬 Chitchat Detected ---")
+        # Run only the Greeter (which is wrapped in the council_layer)
+        greeter_runner = InMemoryRunner(agent=council_layer, app_name="greeter_app")
+        
+        greeter_runner.session_service.create_session_sync(
+            app_name="greeter_app",
+            user_id="user_1",
+            session_id="session_greeter"
+        )
+        
+        events = greeter_runner.run(
+            user_id="user_1",
+            session_id="session_greeter",
+            new_message=types.Content(parts=[types.Part(text=user_prompt)], role="user")
+        )
+        
+        for event in events:
+            if hasattr(event, 'content') and event.content and event.content.parts:
+                print(f"\n[Greeter]: {event.content.parts[0].text}")
+                
+        print("\n(Skipping Brainstorming Loop for simple query)")
+        exit()
+        
+    mediator = get_mediator()
+    
+    # Create the Iteration Unit (Council -> Mediator)
+    iteration_agent = SequentialAgent(
+        name="Council_Iteration",
+        sub_agents=[council_layer, mediator]
+    )
+    
+    # --- Step 3: The Consensus Loop ---
+    print("\n--- 3. 🔁 Entering Consensus Loop... ---")
+    
+    # We use a new runner for the main loop
+    main_runner = InMemoryRunner(agent=iteration_agent, app_name="council_app")
+    session_id = "session_main"
     user_id = "user_1"
-    runner.session_service.create_session_sync(
-        app_name=APP_NAME,
+    
+    # Initialize Session
+    main_runner.session_service.create_session_sync(
+        app_name="council_app",
         user_id=user_id,
         session_id=session_id
     )
+
+    current_input = user_prompt
+    max_loops = 3
     
-    # Construct the content
-    content = types.Content(parts=[types.Part(text=user_prompt)], role="user")
+    for i in range(max_loops):
+        print(f"\n--- Loop {i+1}/{max_loops} ---")
+        
+        # Run the iteration
+        events = main_runner.run(
+            user_id=user_id,
+            session_id=session_id,
+            new_message=types.Content(parts=[types.Part(text=current_input)], role="user")
+        )
+        
+        # Capture Mediator's Output
+        last_response = ""
+        for event in events:
+            print_event(event)
+            if hasattr(event, 'content') and event.content and event.content.parts:
+                last_response = event.content.parts[0].text
+        
+        # Check for Stop Condition
+        if "READY_FOR_SYNTHESIS" in last_response:
+            print("\n✅ Mediator is satisfied. Consensus reached!")
+            break
+        else:
+            print("\n⚠️ Mediator requested refinement. Looping back...")
+            # Prepare input for next loop (Feedback)
+            current_input = "The Mediator has provided feedback. Council, please update your reports based on the feedback above."
+
+    print("\n" + "="*50)
+    print("🏁 FINAL OUTCOME")
+    print("="*50)
+    # The last response from the loop IS the final plan (or the critique if it failed)
+    print(last_response)
+    print("="*50)
+
+    # --- Step 4: Podcast Generation ---
+    print("\n--- 4. 🎙️ Generating Podcast Script... ---")
+    from src.agents.podcaster import create_podcaster
     
-    # Run the agent
-    events = runner.run(
-        user_id=user_id,
-        session_id=session_id,
-        new_message=content
+    podcaster = create_podcaster()
+    podcaster_runner = InMemoryRunner(agent=podcaster, app_name="podcaster_app")
+    
+    podcaster_runner.session_service.create_session_sync(
+        app_name="podcaster_app",
+        user_id="user_1",
+        session_id="session_podcaster"
     )
     
-    print("\n" + "="*50)
-    print("FINAL SYNTHESIZED ACTION PLAN")
-    print("="*50)
+    pod_events = podcaster_runner.run(
+        user_id="user_1",
+        session_id="session_podcaster",
+        new_message=types.Content(parts=[types.Part(text=f"Here is the final plan: {last_response}")], role="user")
+    )
     
-    # Iterate over events and print them
-    for event in events:
-        # We only want to print the final response from the model, or meaningful events.
-        # print_event(event) prints everything which is good for debugging but maybe too much for the user.
-        # Let's print everything for now to ensure we see the output.
-        print_event(event)
-        
-    print("="*50)
+    for event in pod_events:
+        if hasattr(event, 'content') and event.content and event.content.parts:
+            print(event.content.parts[0].text)

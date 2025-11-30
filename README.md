@@ -1,56 +1,90 @@
-# Multi-Persona Council Agent
+# 🧠 Multi-Persona Council Agent
 
-**⚠️ Private Repository**
+> **"A Boardroom in a Box"** — An intelligent, agentic system that brainstorms, debates, and synthesizes actionable strategies using a Council of AI Personas.
 
-A powerful agentic AI system built with the **Google Agent Development Kit (ADK)**. This project implements a "Council of Personas" architecture where multiple specialized AI agents brainstorm on a topic in parallel, followed by a Mediator agent that synthesizes their diverse perspectives into a comprehensive action plan.
+![ADK Powered](https://img.shields.io/badge/Powered%20by-Google%20ADK-blue?style=for-the-badge&logo=google)
+![Python](https://img.shields.io/badge/Python-3.10%2B-yellow?style=for-the-badge&logo=python)
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 
-## 🚀 Features
+## 🌟 Why This Project Wins
+This isn't just another chatbot. It's a **sophisticated decision-making engine** that mimics a real-world executive council. It features:
+1.  **Dynamic Routing**: It doesn't just run everyone. It *thinks* about who is needed (e.g., calling the "Creative Thinker" only for abstract ideas).
+2.  **Real-Time Intelligence**: It searches the *live web* for market data—no hallucinations.
+3.  **Conflict Synthesis**: It forces diverse personas (Optimist vs. Critic) to debate until a consensus is reached.
+4.  **🎙️ Podcast Mode**: It automatically converts the boring text plan into a **fun, 2-minute audio script** ready for production.
 
--   **Multi-Persona Architecture**: Spawns 5 distinct personas to analyze a prompt from different angles:
-    -   **Analyst**: Focuses on data, feasibility, and metrics.
-    -   **Critic**: Identifies weaknesses, risks, and edge cases.
-    -   **Optimist**: Highlights benefits, opportunities, and best-case scenarios.
-    -   **Creative Thinker**: Generates out-of-the-box ideas and metaphors.
-    -   **Domain Expert**: Provides practical, domain-specific tactics using tools.
--   **Mediator Synthesis**: A dedicated agent that resolves conflicts and combines all reports into a final **Synthesized Action Plan**.
--   **Parallel Execution**: Uses `ParallelAgent` to run all council members simultaneously for efficiency.
--   **ADK Web Integration**: Fully compatible with `adk web` for visual debugging and trace analysis.
+---
+
+## 🚀 Key Features
+
+### 1. 🚦 Dynamic Persona Router
+The system analyzes your prompt keywords to assemble the perfect team:
+-   **Core Team (Always Active)**: `Analyst` 📈, `Critic` 🛑, `Optimist` ✨.
+-   **Creative Trigger**: Adds `Creative Thinker` 🎨 if you ask for "ideas", "abstract", or "new names".
+-   **Expert Trigger**: Adds `Domain Expert` 🛠️ if you ask for "market", "cost", or "industry" data.
+
+### 2. 🌐 Real-Time Web Search
+The **Domain Expert** is equipped with `DuckDuckGo Search`.
+-   *Competitors*: Use static/fake data.
+-   *This Agent*: Fetches **live 2024/2025 market trends**, risk factors, and competitor analysis.
+
+### 3. ⚖️ The Mediator (Consensus Engine)
+A specialized `Gemini-1.5-Pro` agent that acts as the CEO.
+-   **Strict Output Format**: It refuses to output generic text. It *must* produce:
+    1.  **Risk & Regret Analysis** (Top 2 Risks + Mitigations)
+    2.  **Strategic Consensus** (Where the Optimist & Critic agree)
+    3.  **5-Step Action Plan** (With Owners & Deadlines)
+
+### 4. 🎙️ Podcast Mode
+After the plan is finalized, the **Podcaster Agent** takes over.
+-   It writes a witty, engaging script between a Host, an Expert, and a Creative Guest.
+-   Perfect for turning dry reports into consumable audio content.
+
+---
 
 ## 🛠️ Installation
 
 1.  **Clone the repository:**
-    *Note: You must be an added collaborator to clone this private repository.*
     ```bash
     git clone https://github.com/manavbhatt072/multi-persona-agent.git
     cd multi-persona-agent
     ```
 
-2.  **Install dependencies:**
+2.  **Set up Virtual Environment:**
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate  # Windows: .venv\Scripts\activate
+    ```
+
+3.  **Install dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-3.  **Set up Environment Variables:**
-    Create a `.env` file in the root directory and add your Google API Key:
+4.  **Configure Environment:**
+    Create a `.env` file and add your Google API Key:
     ```bash
     GOOGLE_API_KEY=your_api_key_here
     ```
 
+---
+
 ## 💻 Usage
 
-### Option 1: Command Line Interface (CLI)
-Run the agent interactively in your terminal:
+### Option 1: CLI (The "Hacker" Way)
+Run the full loop in your terminal. Watch the agents debate in real-time!
 ```bash
 python3 -m src.main
 ```
-You will be prompted to enter a topic, and the agent will display the council's process and the final plan.
 
-### Option 2: ADK Web Visualizer
-Visualize the agent's execution flow and traces using the ADK Web UI:
+### Option 2: ADK Web Visualizer (The "Demo" Way)
+See the beautiful agent graph and trace every thought process.
 ```bash
 adk web . --port 8000
 ```
-Then open your browser to `http://127.0.0.1:8000`.
+Then open `http://127.0.0.1:8000`.
+
+---
 
 ## 📂 Project Structure
 
@@ -58,23 +92,26 @@ Then open your browser to `http://127.0.0.1:8000`.
 multi_personas_agent/
 ├── src/
 │   ├── agents/
-│   │   ├── personas.py       # Definitions of the 5 council personas
-│   │   └── mediator.py       # Definition of the Mediator agent
+│   │   ├── personas.py       # The Council (Analyst, Critic, Optimist, etc.)
+│   │   ├── router.py         # Dynamic selection logic
+│   │   ├── mediator.py       # The CEO/Synthesis agent
+│   │   └── podcaster.py      # 🎙️ The Scriptwriter
 │   ├── flows/
-│   │   └── system.py         # Orchestration logic (Parallel -> Sequential)
+│   │   └── system.py         # Orchestration (Parallel -> Sequential)
 │   ├── tools/
-│   │   └── expert_tool.py    # Tools used by the Domain Expert
-│   ├── main.py               # Entry point for CLI execution
-│   └── agent.py              # Entry point for ADK Web discovery
-├── agent.py                  # Root agent definition
-├── requirements.txt          # Python dependencies
-└── .env                      # Environment variables (not committed)
+│   │   └── expert_tool.py    # 🦆 DuckDuckGo Search Tool
+│   ├── main.py               # CLI Entry Point
+│   └── agent.py              # ADK Web Entry Point
+├── requirements.txt          # Dependencies
+└── .env                      # API Keys
 ```
 
-## 🤝 Collaboration
+## 🤝 Contributing
+This is a private repository for the hackathon team.
+1.  Fork & Clone.
+2.  Create a feature branch (`git checkout -b feature/amazing-idea`).
+3.  Commit & Push.
+4.  Open a Pull Request.
 
-This is a **private repository**. Access is restricted to authorized team members.
-To contribute:
-1.  Ensure you have been added as a collaborator.
-2.  Clone the repo and create a new branch for your feature.
-3.  Push your changes and open a Pull Request for review.
+---
+*Built with ❤️ using Google ADK & Gemini Models.*
