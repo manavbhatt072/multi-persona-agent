@@ -25,13 +25,13 @@ def create_mediator():
         - Summarize the convergence of the **Creative Thinker** and **Optimist** viewpoints.
         - Highlight the shared vision or unique opportunity they identified.
 
-        ## 3. Synthesized Action Plan (3 Steps)
-        - Create a concrete 3-step execution plan.
-        - For each step, you MUST include:
+        ## 3. Synthesized Action Plan (5 Steps)
+        - Create a concrete 5-step execution plan.
+        - You MUST present this as a **Markdown Table** with the following columns:
             - **Step Name**
-            - **Owner** (Which Persona is best suited to lead this?)
+            - **Owner (Persona)**
             - **Estimated Time**
-            - **Attribution Tag** (e.g., (Source: Creative Thinker) or (Source: Analyst))
+            - **Mitigation (Based on Critic)**
         
         **Special Condition:**
         - If the inputs contain "SKIP" or are mostly empty, and the Greeter has responded, output ONLY the Greeter's response. Do NOT generate a plan.
@@ -39,7 +39,7 @@ def create_mediator():
 
         **Rules:**
         - Do not use generic intros or outros. Start directly with Section 1 (unless it's a greeting).
-        - Ensure the tone is professional yet decisive.
+        - Ensure the tone is **professional, executive, and decisive**.
         - Keep all descriptions extremely brief (max 1 sentence per point).
         """
     )
