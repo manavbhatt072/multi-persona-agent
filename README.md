@@ -27,7 +27,48 @@ By combining these, the system provides balanced perspectives, reduced hallucina
 
 The system follows a **Router-Council-Mediator** pattern with a feedback loop, designed to simulate a brainstorming session between experts.
 
-![System Architecture](https://mermaid.ink/img/Zmxvd2NoYXJ0IFRECiAgICBVc2VyKFtVc2VyIElucHV0XSkgLS0+IFJvdXRlclvwn5qmIFJvdXRlciBBZ2VudF0KICAgIFJvdXRlciAtLSBTZWxlY3RzIEV4cGVydHMgLS0+IERlY2lzaW9ue0lzIENoaXRjaGF0P30KICAgIERlY2lzaW9uIC0tIFllcyAtLT4gR3JlZXRlclvwn5KsIEdyZWV0ZXIgQWdlbnRdCiAgICBHcmVldGVyIC0tPiBPdXRwdXQoW0ZpbmFsIFJlc3BvbnNlXSkKICAgIERlY2lzaW9uIC0tIE5vIC0tPiBQMwogICAgc3ViZ3JhcGggQ291bmNpbEJveCBbRHluYW1pYyBDb3VuY2lsIC0gUGFyYWxsZWwgRXhlY3V0aW9uXQogICAgICAgIGRpcmVjdGlvbiBUQgogICAgICAgIFAxW/Cfk4ggQW5hbHlzdF0KICAgICAgICBQMlvwn5uRIENyaXRpY10KICAgICAgICBQM1vinKggT3B0aW1pc3RdCiAgICAgICAgUDRb8J+OqCBDcmVhdGl2ZSBUaGlua2VyXQogICAgICAgIFA1W/Cfm6DvuI8gRG9tYWluIEV4cGVydF0KICAgIGVuZAogICAgUDEgJiBQMiAmIFAzICYgUDQgJiBQNSAtLT4gTWVkaWF0b3Jb4pqW77iPIE1lZGlhdG9yIEFnZW50XQogICAgTWVkaWF0b3IgLS0gU3ludGhlc2l6ZXMgUmVwb3J0cyAtLT4gQ2hlY2t7Q29uc2Vuc3VzIFJlYWNoZWQ/fQogICAgQ2hlY2sgLS0gTm8gKFJlcXVlc3QgUmVmaW5lbWVudCkgLS0+IEZlZWRiYWNrW+KaoO+4jyBGZWVkYmFjayBMb29wXQogICAgRmVlZGJhY2sgLS0+IFAzCiAgICBDaGVjayAtLSBZZXMgKFJlYWR5KSAtLT4gUG9kY2FzdGVyW/CfjpnvuI8gUG9kY2FzdGVyIEFnZW50XQogICAgUG9kY2FzdGVyIC0tPiBPdXRwdXQoW0ZpbmFsIFBvZGNhc3QgU2NyaXB0XSkKICAgIGNsYXNzRGVmIGFnZW50IGZpbGw6I2Y5ZixzdHJva2U6IzMzMyxzdHJva2Utd2lkdGg6MnB4OwogICAgY2xhc3NEZWYgY29udHJvbCBmaWxsOiNmZmQsc3Ryb2tlOiMzMzMsc3Ryb2tlLXdpZHRoOjJweDsKICAgIGNsYXNzRGVmIHN0b3JhZ2UgZmlsbDojZGZkLHN0cm9rZTojMzMzLHN0cm9rZS13aWR0aDoycHg7CiAgICBjbGFzcyBSb3V0ZXIsR3JlZXRlcixNZWRpYXRvcixQb2RjYXN0ZXIsUDEsUDIsUDMsUDQsUDUgYWdlbnQ7CiAgICBjbGFzcyBEZWNpc2lvbixDaGVjayBjb250cm9sOw==)
+```mermaid
+flowchart TD
+    User([User Input]) --> Router[🚦 Router Agent]
+    
+    Router -- "Selects Experts" --> Decision{Is Chitchat?}
+    
+    %% Path 1: Simple Chitchat
+    Decision -- Yes --> Greeter[💬 Greeter Agent]
+    Greeter --> Output([Final Response])
+    
+    %% Path 2: Brainstorming Session
+    Decision -- No --> P3
+    
+    subgraph CouncilBox [Dynamic Council - Parallel Execution]
+        direction TB
+        P1[📈 Analyst]
+        P2[🛑 Critic]
+        P3[✨ Optimist]
+        P4[🎨 Creative Thinker]
+        P5[🛠️ Domain Expert]
+    end
+    
+    P1 & P2 & P3 & P4 & P5 --> Mediator[⚖️ Mediator Agent]
+    
+    Mediator -- "Synthesizes Reports" --> Check{Consensus Reached?}
+    
+    %% Feedback Loop
+    Check -- "No (Request Refinement)" --> Feedback[⚠️ Feedback Loop]
+    Feedback --> P3
+    
+    %% Success Path
+    Check -- "Yes (Ready)" --> Podcaster[🎙️ Podcaster Agent]
+    Podcaster --> Output([Final Podcast Script])
+
+    %% Styling
+    classDef agent fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef control fill:#ffd,stroke:#333,stroke-width:2px;
+    classDef storage fill:#dfd,stroke:#333,stroke-width:2px;
+    
+    class Router,Greeter,Mediator,Podcaster,P1,P2,P3,P4,P5 agent;
+    class Decision,Check control;
+```
 
 ### Workflow Steps:
 1.  **Router Agent**: Analyzes the user's prompt and dynamically selects the best experts (e.g., "Creative Thinker" for abstract ideas).
