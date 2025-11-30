@@ -1,4 +1,10 @@
 from google.adk.agents import ParallelAgent, SequentialAgent
+# --- ADK PRIMITIVES: ParallelAgent & SequentialAgent ---
+# ParallelAgent: Executes multiple sub-agents simultaneously. We use this for the "Council"
+# so that the Analyst, Critic, and Optimist can "think" at the same time, reducing total wait time.
+#
+# SequentialAgent: Executes sub-agents in a strict order, passing the output of one as input to the next.
+# We use this for the high-level flow: Council (Parallel) -> Mediator (Sequential) -> Podcaster (Sequential).
 from src.agents.personas import create_personas
 from src.agents.mediator import create_mediator
 from src.agents.router import create_router
@@ -9,6 +15,12 @@ def get_router():
 def build_dynamic_council(selected_persona_names):
     """
     Builds a ParallelAgent containing only the selected personas.
+    
+    --- ROUTING / FILTERING LOGIC ---
+    This function implements the dynamic selection logic.
+    1. It receives a list of 'selected_persona_names' from the Router Agent.
+    2. It filters the master list of personas to include ONLY those requested.
+    3. It constructs a new ParallelAgent on the fly with this custom subset.
     """
     all_personas = create_personas() # Returns a dict now
     

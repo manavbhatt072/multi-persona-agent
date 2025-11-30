@@ -1,5 +1,10 @@
 from google.adk.agents import LlmAgent
 # Using Pro for complex reasoning and synthesis
+# --- HYBRID MODEL STRATEGY ---
+# We use Gemini 1.5 Pro for the "Mediator" agent.
+# The Mediator requires a larger context window and stronger reasoning capabilities
+# to synthesize conflicting reports from multiple agents into a cohesive plan.
+# Pro excels at this high-level cognitive task.
 PRO_MODEL = "gemini-2.5-pro" 
 
 def create_mediator():

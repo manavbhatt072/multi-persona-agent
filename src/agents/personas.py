@@ -2,7 +2,17 @@ from google.adk.agents import LlmAgent
 from src.tools.expert_tool import INDUSTRY_TOOL
 
 # Using Flash for speed and cost-efficiency in parallel execution
+# --- HYBRID MODEL STRATEGY ---
+# We use Gemini 1.5 Flash for the "Worker" personas (Analyst, Critic, etc.).
+# Flash is optimized for speed and lower latency, which is crucial when running
+# multiple agents in parallel. It provides high-quality output for specific,
+# narrow tasks without the higher cost/latency of the Pro model.
 FLASH_MODEL = "gemini-2.5-flash" 
+
+# --- ADK PRIMITIVE: LlmAgent ---
+# The LlmAgent is the fundamental building block of the Google Agent Development Kit.
+# It wraps a Gemini model with specific instructions (system prompt) and optional tools.
+# Each persona below is an instance of LlmAgent with a unique "personality" and cognitive style. 
 
 def create_personas():
     # --- 1. Analyst: Data and Feasibility ---
