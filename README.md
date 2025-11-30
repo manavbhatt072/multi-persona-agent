@@ -176,6 +176,24 @@ multi_personas_agent/
 └── .env                      # API Keys
 ```
 
+---
+
+## ☁️ Deployment (Render.com)
+
+Since this application uses `adk web` (a persistent server), it is best deployed on platforms like **Render** or **Railway** that support Docker. **Vercel is not recommended** as it does not support long-running processes like the ADK Visualizer.
+
+1.  **Push your code** to a GitHub repository.
+2.  **Sign up** for [Render.com](https://render.com).
+3.  **Create a New Web Service**:
+    -   Connect your GitHub repo.
+    -   Select **Docker** as the Runtime.
+    -   **Region**: Choose one close to you.
+    -   **Environment Variables**:
+        -   Add `GOOGLE_API_KEY`: Your Gemini API Key.
+4.  **Deploy**: Render will build the Docker image and start the `adk web` server.
+
+---
+
 ## 🤝 Contributing
 This is a private repository for the hackathon team.
 1.  Fork & Clone.
