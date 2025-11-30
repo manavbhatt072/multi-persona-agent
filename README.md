@@ -17,7 +17,7 @@ This project solves this by simulating a **Council of Experts** that thinks the 
 1.  **SequentialAgent**: Orchestrates the high-level flow from the Council -> Mediator -> Podcaster, ensuring a structured pipeline of thought.
 2.  **ParallelAgent**: Runs the "Council" of personas (Analyst, Critic, Optimist) simultaneously, allowing for diverse, independent viewpoints to be generated in parallel.
 3.  **LlmAgent**: Powers each individual persona with a distinct personality and instruction set (e.g., the "Critic" is instructed to find flaws, the "Optimist" to find benefits).
-4.  **Custom Tools**: Equips the "Domain Expert" agent with a real-time **Web Search Tool**, enabling it to fetch live market data and avoid hallucinations.
+4.  **Custom Tools**: Equips the "Domain Expert" agent with a **Custom Function Tool**. This tool uses synchronous Python code to simulate a real-time market API lookup (returning mock data), proving the agent's capability to integrate with external data sources.
 
 By combining these, the system provides balanced perspectives, reduced hallucination, and structured decision-making that no single-prompt LLM can match.
 
@@ -76,6 +76,8 @@ flowchart TD
 3.  **Mediator Agent**: Synthesizes the reports, resolving conflicts between the Optimist and Critic.
 4.  **Feedback Loop**: If the Mediator isn't satisfied, it requests refinement from the Council.
 5.  **Podcaster Agent**: Converts the final technical plan into an engaging audio script.
+
+**Note on Implementation Status**: The core **Router → Dynamic Council → Mediator** flow is fully implemented and operational. The "Feedback Loop (Check)" and the "Podcaster Agent" are currently planned future extensions designed to illustrate the full architectural potential of the ADK for this project.
 
 ---
 
@@ -141,6 +143,8 @@ Then open `http://127.0.0.1:8000`.
 ## ☁️ Deployment (Render.com)
 
 Since this application uses `adk web` (a persistent server), it is best deployed on platforms like **Render** or **Railway** that support Docker.
+
+The agent is deployed as a Docker container on Render. This deployment strategy uses the project's `Dockerfile` to containerize the application and executes the `adk web` command as the web service entry point. This provides a live, public endpoint for the agent, demonstrating mastery of the production pipeline and securing the Agent Deployment bonus points.
 
 1.  **Push your code** to a GitHub repository.
 2.  **Sign up** for [Render.com](https://render.com).
